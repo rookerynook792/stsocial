@@ -1,0 +1,20 @@
+# One-click deploy blueprint for Render (https://render.com)
+services:
+  - type: web
+    name: st-social
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server/index.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Set these in the dashboard (Render lets you enter secret values):
+      # - key: AUTH_SECRET
+      #   sync: false
+      # - key: INGEST_API_KEY
+      #   sync: false
+    # For persistent SQLite: create a Render Disk, mount it at /data, then add:
+    # - key: DATA_DIR
+    #   value: /data
