@@ -86,14 +86,16 @@ export async function render(container, ctx) {
     goto('#/home');
   }
 
-  // demo quick logins
-  const demo = h('div', { class: 'demo-creds' },
+  // demo quick logins (demo mode only)
+  let meta = store.meta;
+  if (!meta) { try { meta = await api.get('/api/meta'); store.meta = meta; } catch { meta = { demoMode: false }; } }
+  const demo = meta.demoMode ? h('div', { class: 'demo-creds' },
     h('b', { text: 'Try a demo account' }),
     h('div', { class: 'mt-sm', style: { display: 'flex', gap: '8px', flexWrap: 'wrap' } },
       h('button', { class: 'btn btn-ghost btn-sm', text: '🎓 Student (verified)', onClick: () => quick('rileyf@st-andrews.ac.uk', 'stsocial123') }),
       h('button', { class: 'btn btn-ghost btn-sm', text: '🛡️ Admin', onClick: () => quick('admin@stsocial.app', 'stsocial-admin') }),
     ),
-  );
+  ) : null;
 
   async function quick(em, pw) {
     toast('Signing in…', 'info', 1200);
