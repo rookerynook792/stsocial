@@ -30,6 +30,7 @@ function seedSources() {
     ['St Andrews Golf — Live News', 'rss', 'https://news.google.com/rss/search?q=%22St+Andrews%22+golf&hl=en-GB&gl=GB&ceid=GB:en', 7, '{"produces":"town","category":"golf","maxAgeDays":21,"maxItems":10}'],
     ['St Andrews Local News — Live', 'rss', 'https://news.google.com/rss/search?q=%22St+Andrews%22+-golf&hl=en-GB&gl=GB&ceid=GB:en', 7, '{"produces":"town","category":"news","maxAgeDays":14,"maxItems":10}'],
     ['St Andrews — Annual Calendar', 'curated', 'curated://st-andrews-annual', 9, '{}'],
+    ['University Verified Updates (all categories)', 'uni_updates', 'curated://st-andrews-uni-updates', 10, '{"produces":"university"}'],
     ['St Andrews Weather (daily forecast)', 'weather', 'weather://open-meteo-st-andrews', 8, '{}'],
   ];
   const byUrl = db.prepare('SELECT id FROM event_sources WHERE url = ?');
