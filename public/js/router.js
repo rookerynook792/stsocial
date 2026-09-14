@@ -5,6 +5,7 @@ import * as Home from './views/home.js';
 import * as Events from './views/events.js';
 import * as EventDetail from './views/event.js';
 import * as Explore from './views/explore.js';
+import * as Gallery from './views/gallery.js';
 import * as Forum from './views/forum.js';
 import * as PostDetail from './views/post.js';
 import * as ComposePost from './views/compose-post.js';
@@ -24,6 +25,7 @@ export const NAV = [
   { id: 'home', label: 'Home', ico: '🏠', hash: '#/home' },
   { id: 'events', label: 'Events', ico: '📅', hash: '#/events' },
   { id: 'guide', label: 'Guide', ico: '🧭', hash: '#/explore' },
+  { id: 'gallery', label: 'Gallery', ico: '📸', hash: '#/gallery' },
   { id: 'forum', label: 'Forum', ico: '💬', hash: '#/forum' },
   { id: 'town', label: 'Town', ico: '🏘️', hash: '#/town' },
   { id: 'profile', label: 'Profile', ico: '👤', hash: '#/profile' },
@@ -36,6 +38,7 @@ const ROUTES = [
   { m: /^\/events\/?$/, view: Events, tab: 'events', title: 'Events' },
   { m: /^\/events?\//, view: EventDetail, tab: 'events', back: true, title: 'Event' },
   { m: /^\/explore\/?$/, view: Explore, tab: 'guide', title: 'Explore St Andrews' },
+  { m: /^\/gallery\/?$/, view: Gallery, tab: 'gallery', title: 'Gallery' },
   { m: /^\/forum\/?$/, view: Forum, tab: 'forum', title: 'Forum' },
   { m: /^\/post\//, view: PostDetail, tab: 'forum', back: true, title: 'Discussion' },
   { m: /^\/compose\/post/, view: ComposePost, back: true, title: 'New Post', auth: true },
