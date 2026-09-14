@@ -1,7 +1,7 @@
 'use strict';
 import { api } from '../api.js';
 import { store } from '../store.js';
-import { h, emptyState, stars, gradClass, timeAgo, sheet, toast } from '../ui.js';
+import { h, emptyState, stars, gradClass, timeAgo, sheet, toast, CAT_LABEL } from '../ui.js';
 
 export async function render(container, ctx) {
   container.innerHTML = '';
@@ -15,15 +15,32 @@ export async function render(container, ctx) {
   hero.append(h('span', { class: 'goverlay' }), h('span', { text: p.emoji || '📍' }));
   container.append(hero);
 
+  const catLabel = CAT_LABEL[p.category] || p.category || 'local';
   container.append(h('div', { class: 'card mt', style: { padding: '16px' } },
-    h('h1', { style: { fontSize: '23px' }, text: p.name }),
+    h('div', { class: 'flex aic jcb' },
+      h('h1', { style: { fontSize: '23px' }, text: p.name }),
+      p.price ? h('span', { class: 'badge imported', text: p.price }) : null),
     h('div', { class: 'flex aic gap mt-sm' },
-      p.review_count > 0 ? stars(p.rating) : h('span', { class: 'tag-soft', text: '📍 ' + (p.category || 'local') }),
+      h('span', { class: 'tag-soft', text: '📍 ' + catLabel }),
+      p.review_count > 0 ? stars(p.rating) : null,
       p.review_count > 0 ? h('span', { class: 'muted small', text: p.review_count + ' student reviews' }) : h('span', { class: 'muted small', text: 'No student reviews yet' })),
     p.description ? h('p', { class: 'muted', style: { marginTop: '12px' }, text: p.description }) : null,
+    p.vibe ? h('div', { class: 'vibe-line', style: { marginTop: '12px' } },
+      h('b', { text: 'The vibe: ' }), h('span', { text: p.vibe })) : null,
     infoRows(p),
-    p.website ? h('a', { class: 'btn btn-primary mt', href: p.website, target: '_blank', rel: 'noopener' }, h('span', { text: '🌐 Visit website' })) : null,
+    p.website || (p.address) ? h('div', { class: 'btn-row mt' },
+      p.address ? h('a', { class: 'btn btn-primary', href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((p.name + ', ' + p.address).replace(/,\s*,/g, ','))}`, target: '_blank', rel: 'noopener' }, h('span', { text: '🗺️ Open in Google Maps' })) : null,
+      p.website ? h('a', { class: 'btn btn-ghost', href: p.website, target: '_blank', rel: 'noopener' }, h('span', { text: '🌐 Website' })) : null) : null,
   ));
+
+  // “Tons of info” blocks
+  if (p.must_try || p.student_tip || p.fun_fact) {
+    const info = h('div', { class: 'stack-sm', style: { marginTop: '14px' } });
+    if (p.must_try) info.append(infoCard('🍽️', 'Must try', p.must_try));
+    if (p.student_tip) info.append(infoCard('🎓', 'Student tip', p.student_tip));
+    if (p.fun_fact) info.append(infoCard('💡', 'Fun fact', p.fun_fact));
+    container.append(info);
+  }
 
   // reviews
   const reviews = data.reviews;
@@ -42,13 +59,19 @@ export async function render(container, ctx) {
   }
 }
 
+function infoCard(emoji, title, text) {
+  return h('div', { class: 'card', style: { padding: '14px', borderLeft: '4px solid var(--brand)' } },
+    h('div', { class: 'flex aic gap' }, h('span', { text: emoji, style: { fontSize: '18px' } }), h('b', { text: title })),
+    h('p', { class: 'muted small', style: { marginTop: '6px' }, text }));
+}
+
 function infoRows(p) {
-  const row = (ico, l, v) => h('div', { class: 'info-row' }, h('div', { class: 'ir-ico', text: ico }),
-    h('div', { style: { flex: 1 } }, h('div', { class: 'ir-l', text: l }), h('div', { class: 'ir-v', text: v })));
-  return h('div', { style: { marginTop: '14px' } },
-    row('📍', 'Address', p.address || '—'),
-    row('🕑', 'Hours', p.hours || '—'),
-  );
+  const row = (ico, l, v) => v ? h('div', { class: 'info-row' }, h('div', { class: 'ir-ico', text: ico }),
+    h('div', { style: { flex: 1 } }, h('div', { class: 'ir-l', text: l }), h('div', { class: 'ir-v', text: v }))) : null;
+  const rows = [row('📍', 'Address', p.address), row('🕑', 'Hours', p.hours)];
+  const el = h('div', { style: { marginTop: '14px' } });
+  rows.forEach((r) => r && el.append(r));
+  return el;
 }
 
 function reviewSheet(p) {

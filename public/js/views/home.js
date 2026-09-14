@@ -46,6 +46,15 @@ export async function render(container, ctx) {
   );
   container.append(hero);
 
+  // explore guide card
+  container.append(h('a', { class: 'card explore-card', href: '#/explore' },
+    h('div', { class: 'ec-ico', text: '🧭' }),
+    h('div', { style: { flex: 1, minWidth: 0 } },
+      h('div', { class: 'ec-t' }, 'Explore St Andrews', h('span', { class: 'ec-new', text: 'NEW' })),
+      h('div', { class: 'ec-d', text: '1,100 years of history, 10 fun facts, 15 things to do — plus every pub and eatery, deep. The go-to guide for students.' })),
+    h('div', { class: 'ec-arrow', text: '→' }),
+  ));
+
   // happening now
   if (d.happeningNow && d.happeningNow.length) {
     container.append(h('div', { class: 'section' },

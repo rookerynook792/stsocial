@@ -237,11 +237,17 @@ export function placeCard(place) {
   thumb.append(document.createTextNode(place.emoji || '📍'));
   a.append(thumb, h('div', { class: 'er-body' },
     h('div', { class: 'p-name', text: place.name }),
-    h('div', { class: 'p-sub' }, stars(place.rating), ' ', h('span', { class: 'faint', text: '· ' + place.review_count + ' reviews' })),
-    h('div', { class: 'p-sub', text: place.address }),
+    place.review_count > 0
+      ? h('div', { class: 'p-sub' }, stars(place.rating), ' ', h('span', { class: 'faint', text: '· ' + place.review_count + ' reviews' }))
+      : h('div', { class: 'p-sub' },
+          place.price ? h('span', { class: 'tag-soft', text: place.price }) : null,
+          place.vibe ? h('span', { class: 'faint', text: '  ' + place.vibe }) : null),
+    place.address ? h('div', { class: 'p-sub', text: place.address }) : null,
+    place.description ? h('div', { class: 'p-desc', text: place.description }) : null,
   ));
   return a;
 }
+export const CAT_LABEL = { bar: 'Bar & nightlife', cafe: 'Café', restaurant: 'Restaurant', shop: 'Shops', gym: 'Gym', entertainment: 'Entertainment', service: 'Services', golf: 'Golf', landmark: 'Landmark' };
 export { stars };
 
 /* --------------------------------- toast -------------------------------- */

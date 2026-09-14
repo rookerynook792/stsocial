@@ -46,6 +46,7 @@ r.get('/places', (req, res) => {
       id: p.id, name: p.name, category: p.category, address: p.address, hours: p.hours,
       website: p.website, description: p.description, rating: p.rating, review_count: p.review_count,
       emoji: p.emoji, image: p.image, lat: p.lat, lng: p.lng, is_demo: !!p.is_demo,
+      price: p.price, vibe: p.vibe, must_try: p.must_try, student_tip: p.student_tip, fun_fact: p.fun_fact,
     })),
     categories: PLACE_CATEGORIES,
   });
@@ -60,6 +61,7 @@ r.get('/places/:id', (req, res) => {
     place: {
       id: p.id, name: p.name, category: p.category, address: p.address, hours: p.hours, website: p.website,
       description: p.description, rating: p.rating, review_count: p.review_count, emoji: p.emoji, image: p.image,
+      lat: p.lat, lng: p.lng, price: p.price, vibe: p.vibe, must_try: p.must_try, student_tip: p.student_tip, fun_fact: p.fun_fact,
     },
     reviews: reviews.map((x) => ({ id: x.id, rating: x.rating, body: x.body, author_name: x.author_name, created_at: x.created_at })),
   });

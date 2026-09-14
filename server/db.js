@@ -282,6 +282,10 @@ migrate();
   if (!townCols.includes('is_demo')) db.exec('ALTER TABLE town_updates ADD COLUMN is_demo INTEGER NOT NULL DEFAULT 0');
   const uniCols = db.prepare('PRAGMA table_info(university_updates)').all().map((c) => c.name);
   if (!uniCols.includes('is_demo')) db.exec('ALTER TABLE university_updates ADD COLUMN is_demo INTEGER NOT NULL DEFAULT 0');
+  const placeCols = db.prepare('PRAGMA table_info(places)').all().map((c) => c.name);
+  for (const col of ['price', 'vibe', 'must_try', 'student_tip', 'fun_fact']) {
+    if (!placeCols.includes(col)) db.exec(`ALTER TABLE places ADD COLUMN ${col} TEXT`);
+  }
 })();
 
 module.exports = { db, metaGet, metaSet };
