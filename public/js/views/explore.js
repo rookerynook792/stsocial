@@ -68,6 +68,60 @@ function doSheet(d) {
   sheet({ title: d.emoji + ' ' + d.title, body, actions: [maps] });
 }
 
+function renderSocieties() {
+  const sec = h('div', { id: 'sec-socs', class: 'section' });
+  sec.append(secHead('🎓', 'Societies & Networks',
+    SOCIETY_COUNT + ' affiliated with the Students’ Association — tap any for its official page, email & signup'));
+
+  const inputWrap = h('div', { style: { position: 'relative', margin: '12px 0 2px' } });
+  inputWrap.append(h('span', { style: { position: 'absolute', left: '13px', top: '18px', transform: 'translateY(-50%)', opacity: '.5', pointerEvents: 'none' }, text: '🔍' }));
+  const input = h('input', { class: 'input', type: 'search', placeholder: 'Search all ' + SOCIETY_COUNT + ' societies…', style: { width: '100%', boxSizing: 'border-box', paddingLeft: '42px' } });
+  inputWrap.append(input);
+  sec.append(inputWrap);
+
+  const box = h('div');
+  function draw() {
+    box.replaceChildren();
+    const q = (input.value || '').trim().toLowerCase();
+    let shown = 0;
+    SOCIETIES.groups.forEach((g) => {
+      const items = q
+        ? g.items.filter((s) => (s.name + ' ' + s.desc + ' ' + g.label).toLowerCase().includes(q))
+        : g.items;
+      if (!items.length) return;
+      shown += items.length;
+      const gh = h('div', { class: 'soc-group-head' });
+      gh.append(h('span', { text: g.ico }));
+      gh.append(h('span', { text: g.label }));
+      gh.append(h('span', { class: 'soc-count', text: String(items.length) }));
+      box.append(gh);
+      if (g.note && !q) box.append(h('div', { class: 'faint small', style: { margin: '0 2px 8px' }, text: g.note }));
+      const list = h('div', { class: 'soc-list' });
+      items.forEach((s) => {
+        const top = h('div', { class: 'soc-row-top' });
+        top.append(h('span', { class: 'soc-name', text: s.name }));
+        top.append(h('span', { class: 'soc-go', text: '↗' }));
+        const row = h('a', { class: 'soc-row', href: s.url, target: '_blank', rel: 'noopener' });
+        row.append(top);
+        if (s.desc) row.append(h('div', { class: 'soc-desc', text: s.desc }));
+        list.append(row);
+      });
+      box.append(list);
+    });
+    if (!shown) box.append(emptyState('🔍', 'No societies match “' + input.value + '”'));
+    box.append(h('div', { class: 'faint small', style: { textAlign: 'right', margin: '6px 4px 0' }, text: shown + ' of ' + SOCIETY_COUNT + ' shown' }));
+  }
+  input.addEventListener('input', draw);
+  sec.append(box);
+  draw();
+
+  const foot = h('div', { class: 'card', style: { padding: '12px 14px', marginTop: '12px' } });
+  foot.append(h('div', { class: 'ri-title', text: 'How to join' }));
+  foot.append(h('div', { class: 'ri-sub', style: { marginTop: '4px', lineHeight: '1.55' }, text: 'Every society above has an official page on yourunion.net with its contact email, socials and one-tap membership sign-up — fees go straight to the society. Questions? The Activities Team is at the Union, St Mary’s Place, KY16 9UZ. Full listing maintained by the Students’ Association, updated ' + SOCIETIES.updated + '.' }));
+  sec.append(foot);
+  return sec;
+}
+
 export async function render(container) {
   container.innerHTML = '';
 
