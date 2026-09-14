@@ -15,6 +15,8 @@ export const GUIDE = {
     { v: '29+', l: 'Times The Open has been played here' },
     { v: '2', l: 'Golden beaches (West Sands & Saltcoats)' },
     { v: '18', l: 'Holes on the most famous course on earth' },
+    { v: '205', l: 'Student societies & networks — join any' },
+    { v: '1794', l: 'Debating society founded — the oldest' },
   ],
 
   starter: [

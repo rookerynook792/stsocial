@@ -581,3 +581,16 @@ p { margin: 0; }
 .lb-navrow { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
 .lb-nav { background: var(--surface-3); }
 .lb-count { font-size: 12px; font-weight: 800; color: var(--text-faint); }
+
+/* ---------------------- societies directory ---------------------- */
+.soc-group-head { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--text-dim); margin: 16px 2px 8px; }
+.soc-count { background: var(--surface-3); border-radius: 8px; padding: 1px 7px; font-size: 11px; color: var(--text-faint); }
+.soc-list { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+.soc-row { display: block; padding: 10px 13px; border-bottom: 1px solid var(--border); text-decoration: none; color: inherit; transition: background .12s; }
+.soc-row:last-child { border-bottom: none; }
+.soc-row:hover { background: var(--surface-2); }
+.soc-row:active { background: var(--surface-3); }
+.soc-row-top { display: flex; align-items: baseline; gap: 8px; }
+.soc-name { font-weight: 700; font-size: 13.5px; color: var(--text); }
+.soc-go { margin-left: auto; font-size: 12px; color: var(--text-faint); flex: none; }
+.soc-desc { font-size: 12px; color: var(--text-faint); margin-top: 2px; line-height: 1.4; }

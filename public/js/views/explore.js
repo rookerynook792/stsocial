@@ -2,6 +2,7 @@
 import { api } from '../api.js';
 import { h, emptyState, placeCard, sheet } from '../ui.js';
 import { GUIDE } from '../data/guide.js';
+import { SOCIETIES, SOCIETY_COUNT } from '../data/societies.js';
 
 const SECTIONS = [
   { id: 'sec-overview', label: 'Overview', ico: '🧭' },
@@ -11,6 +12,7 @@ const SECTIONS = [
   { id: 'sec-eats', label: 'Eats', ico: '🍽️' },
   { id: 'sec-night', label: 'Nightlife', ico: '🍺' },
   { id: 'sec-must', label: 'Must Do', ico: '⭐' },
+  { id: 'sec-socs', label: 'Societies', ico: '🎓' },
 ];
 
 function secHead(emoji, title, sub) {
@@ -172,4 +174,7 @@ export async function render(container) {
   });
   mustSec.append(must);
   container.append(mustSec);
+
+  /* societies & networks — full official directory */
+  container.append(renderSocieties());
 }
