@@ -42,10 +42,20 @@ function seed() {
     return res.lastInsertRowid;
   };
 
+  // Always create the functional admin account (present in both demo and live mode).
+  console.log('Creating admin account…');
+  const adminId = addUser({ name: 'ST SOCIAL Team', username: 'stsocial', email: 'admin@stsocial.app', password: 'stsocial-admin', avatar: '🦉', role: 'admin', verified: 1, bio: 'We keep ST SOCIAL running. Say hi!', interests: ['community'] });
+
+  if (!config.demoMode) {
+    console.log('\n✅ Seed complete (LIVE mode — no sample data).');
+    console.log('   Admin   : admin@stsocial.app / stsocial-admin');
+    console.log('   Live sources will populate content on the next ingest.');
+    return true;
+  }
+
   console.log('Seeding demo users…');
-  const ids = {};
+  const ids = { stsocial: adminId };
   const users = [
-    { name: 'ST SOCIAL Team', username: 'stsocial', email: 'admin@stsocial.app', password: 'stsocial-admin', avatar: '🦉', role: 'admin', verified: 1, bio: 'We keep ST SOCIAL running. Say hi!', interests: ['community'] },
     { name: 'Riley Fraser', username: 'rileyf', email: 'rileyf@st-andrews.ac.uk', avatar: '🎒', course: 'BSc Geography', year: '3rd year', verified: 1, bio: 'Maps, beaches and bad karaoke.', interests: ['hiking', 'photography', 'rugby'] },
     { name: 'Amara Okafor', username: 'amara', email: 'amara.o@st-andrews.ac.uk', avatar: '⚖️', course: 'MA Law', year: '2nd year', verified: 1, interests: ['debate', 'reading', 'coffee'] },
     { name: 'Tom Boyd', username: 'tomboyd', email: 'tom.boyd@st-andrews.ac.uk', avatar: '🏉', course: 'BA Philosophy', year: '4th year', verified: 1, bio: 'Rugby 1st XV. Ask me about ethics or scrums.', interests: ['rugby', 'folk', 'food'] },
@@ -181,7 +191,27 @@ function seed() {
   return true;
 }
 
-module.exports = { seed, resetDb };
+/**
+ * Remove sample/demo-flagged rows. Called on boot when demo mode is OFF, so a
+ * database that was previously demo-seeded becomes a clean live database.
+ */
+function purgeDemo() {
+  const { db } = require('./db');
+  const counts = {};
+  counts.events = db.prepare('DELETE FROM events WHERE is_demo = 1').run().changes;
+  counts.posts = db.prepare('DELETE FROM posts WHERE is_demo = 1').run().changes;
+  counts.comments = db.prepare('DELETE FROM comments WHERE post_id NOT IN (SELECT id FROM posts)').run().changes;
+  counts.places = db.prepare('DELETE FROM places WHERE is_demo = 1').run().changes;
+  counts.societies = db.prepare('DELETE FROM societies WHERE is_demo = 1').run().changes;
+  try {
+    counts.townUpdates = db.prepare('DELETE FROM town_updates WHERE is_demo = 1').run().changes;
+    counts.uniUpdates = db.prepare('DELETE FROM university_updates WHERE is_demo = 1').run().changes;
+  } catch { /* older schema without is_demo on those tables */ }
+  const total = Object.values(counts).reduce((a, b) => a + b, 0);
+  if (total > 0) console.log(`[live mode] purged demo rows: ${JSON.stringify(counts)}`);
+}
+
+module.exports = { seed, resetDb, purgeDemo };
 
 if (require.main === module) {
   if (process.argv.includes('--reset')) resetDb();

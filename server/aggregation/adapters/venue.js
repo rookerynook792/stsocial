@@ -14,6 +14,7 @@ class VenueSource extends SourceAdapter {
     this.type = 'venue';
     this.reliability = 6;
     this.produces = 'events';
+    this.isDemoSource = true; // content is generated sample data
   }
   async fetch(config, live) {
     if (live && config && config.url) {

@@ -14,6 +14,7 @@ class TownFeedSource extends SourceAdapter {
     this.type = 'town_feed';
     this.reliability = 8;
     this.produces = 'town';
+    this.isDemoSource = true; // content is generated sample data
   }
   async fetch(config, live) {
     if (live && config && config.url) {

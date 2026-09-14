@@ -32,7 +32,7 @@ function upsertEvent(item, row, adapter) {
   const key = makeKey(item.title, date);
   const reliability = item.reliability != null ? item.reliability : (adapter.reliability || row.reliability);
   const srcType = sourceTypeFor(adapter, reliability);
-  const isDemo = config.demoMode ? 1 : 0;
+  const isDemo = adapter.isDemoSource ? 1 : 0;
 
   const incoming = {
     title: (item.title || 'Untitled').slice(0, 160),
@@ -105,25 +105,25 @@ function upsertEvent(item, row, adapter) {
   return { id: res.lastInsertRowid, merged: false };
 }
 
-function upsertTown(item, row) {
+function upsertTown(item, row, adapter) {
   const now = Date.now();
   const date = item.date || new Date().toISOString().slice(0, 10);
   const key = require('../util').sha1(`${row.id}:${item.category}:${(item.title || '').toLowerCase()}:${date.slice(5)}`);
   const exists = db.prepare('SELECT id FROM town_updates WHERE dedup_key = ?').get(key);
   if (exists) return { merged: true, id: exists.id };
-  const res = db.prepare('INSERT INTO town_updates (category, title, body, source_name, source_url, verified, dedup_key, created_at) VALUES (?,?,?,?,?,?,?,?)')
-    .run(item.category, item.title, item.body || '', row.name, item.sourceUrl || row.url || null, row.reliability >= 7 ? 1 : 0, key, now);
+  const res = db.prepare('INSERT INTO town_updates (category, title, body, source_name, source_url, verified, dedup_key, created_at, is_demo) VALUES (?,?,?,?,?,?,?,?,?)')
+    .run(item.category, item.title, item.body || '', row.name, item.sourceUrl || row.url || null, row.reliability >= 7 ? 1 : 0, key, now, adapter && adapter.isDemoSource ? 1 : 0);
   return { merged: false, id: res.lastInsertRowid };
 }
 
-function upsertUniversity(item, row) {
+function upsertUniversity(item, row, adapter) {
   const now = Date.now();
   const date = item.date || new Date().toISOString().slice(0, 10);
   const key = require('../util').sha1(`${row.id}:${item.category}:${(item.title || '').toLowerCase()}:${date.slice(5)}`);
   const exists = db.prepare('SELECT id FROM university_updates WHERE dedup_key = ?').get(key);
   if (exists) return { merged: true, id: exists.id };
-  const res = db.prepare('INSERT INTO university_updates (category, title, body, source_name, source_url, important, dedup_key, created_at) VALUES (?,?,?,?,?,?,?,?)')
-    .run(item.category, item.title, item.body || '', row.name, item.sourceUrl || row.url || null, item.important ? 1 : 0, key, now);
+  const res = db.prepare('INSERT INTO university_updates (category, title, body, source_name, source_url, important, dedup_key, created_at, is_demo) VALUES (?,?,?,?,?,?,?,?,?)')
+    .run(item.category, item.title, item.body || '', row.name, item.sourceUrl || row.url || null, item.important ? 1 : 0, key, now, adapter && adapter.isDemoSource ? 1 : 0);
   return { merged: false, id: res.lastInsertRowid };
 }
 
@@ -131,11 +131,15 @@ async function runIngest(reason = 'scheduled') {
   const started = Date.now();
   const summary = { started, reason, eventsAdded: 0, eventsMerged: 0, townAdded: 0, uniAdded: 0, sources: [] };
   for (const row of sources.enabledSources()) {
+    const rowCfg = JSON.parse(row.config || '{}');
     const adapter = sources.adapterFor(row);
     if (!adapter) continue;
+    // In live-only mode, sample-data generators produce nothing.
+    if (adapter.isDemoSource && !config.demoMode) { sources.markRun(row.id, 0); continue; }
+    if (rowCfg.produces) adapter.produces = rowCfg.produces;
     let items = [];
     try {
-      items = (await adapter.fetch(JSON.parse(row.config || '{}'), config.liveSources)) || [];
+      items = (await adapter.fetch({ url: row.url, ...rowCfg }, config.liveSources)) || [];
     } catch (e) {
       // A failing source never breaks the run; log and move on.
       sources.markRun(row.id, 0);
@@ -147,8 +151,8 @@ async function runIngest(reason = 'scheduled') {
       const r = adapter.produces === 'events'
         ? upsertEvent(item, row, adapter)
         : adapter.produces === 'town'
-          ? upsertTown(item, row)
-          : upsertUniversity(item, row);
+          ? upsertTown(item, row, adapter)
+          : upsertUniversity(item, row, adapter);
       if (r.merged) merged++; else added++;
       if (adapter.produces === 'events') { r.merged ? (summary.eventsMerged++) : (summary.eventsAdded++); }
       else if (adapter.produces === 'town') { if (!r.merged) summary.townAdded++; }
@@ -163,6 +167,9 @@ async function runIngest(reason = 'scheduled') {
   metaSet('last_ingest_summary', JSON.stringify({ eventsAdded: summary.eventsAdded, eventsMerged: summary.eventsMerged, tookMs: summary.tookMs, at: summary.finished }));
   // Prune demo data that is far in the past so the demo stays tidy.
   db.prepare(`DELETE FROM events WHERE is_demo = 1 AND status != 'removed' AND start_ms < ?`).run(Date.now() - 14 * DAY);
+  // Prune stale live town/university updates so those pages stay current.
+  db.prepare('DELETE FROM town_updates WHERE created_at < ?').run(Date.now() - 35 * DAY);
+  db.prepare('DELETE FROM university_updates WHERE created_at < ?').run(Date.now() - 90 * DAY);
   return summary;
 }
 

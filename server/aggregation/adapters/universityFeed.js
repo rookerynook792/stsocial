@@ -14,6 +14,7 @@ class UniversityFeedSource extends SourceAdapter {
     this.type = 'university_feed';
     this.reliability = 10;
     this.produces = 'university';
+    this.isDemoSource = true; // content is generated sample data
   }
   async fetch(config, live) {
     if (live && config && config.url) {

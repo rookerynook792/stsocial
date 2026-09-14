@@ -42,6 +42,7 @@ class RssSource extends SourceAdapter {
     this.type = 'rss';
     this.reliability = 5;
     this.produces = 'events';
+    this.isDemoSource = false; // real fetched content
   }
   async fetch(config, live) {
     const url = (config && config.url) || this.url;
@@ -50,15 +51,16 @@ class RssSource extends SourceAdapter {
       const res = await fetch(url, { headers: { 'User-Agent': 'ST-Social/1.0 (event aggregation)' }, signal: AbortSignal.timeout(12000) });
       if (!res.ok) return [];
       const xml = await res.text();
+      const produces = (config && config.produces) || this.produces;
       return items(xml).map((it) => {
         const title = tag(it, 'title');
         if (!title) return null;
         const desc = tag(it, 'description') || tag(it, 'content') || tag(it, 'summary');
         const link = tag(it, 'link');
+        const cats = [...it.matchAll(/<category[^>]*>([\s\S]*?)<\/category>/gi)]
+          .map((m) => decode(m[1]).trim()).filter(Boolean);
+        const image = tag(it, 'enclosure') || null;
         const when = tag(it, 'pubDate') || tag(it, 'updated') || tag(it, 'published');
-        const location = tag(it, 'geo:lat') && tag(it, 'geo:long')
-          ? { lat: parseFloat(tag(it, 'geo:lat')), lng: parseFloat(tag(it, 'geo:long')) }
-          : {};
         let date = null; let startTime = null;
         const t = when ? new Date(when) : null;
         if (t && !isNaN(t)) {
@@ -66,7 +68,22 @@ class RssSource extends SourceAdapter {
           date = d.toISOString().slice(0, 10);
           startTime = d.toISOString().slice(11, 16);
         }
-        return { title, description: desc.slice(0, 500), date, startTime, link, location, sourceName: this.name, sourceUrl: link || url };
+        const sourceName = this.name;
+        const sourceUrl = link || url;
+        // Freshness gate (town/university updates are shown "just now" in the UI,
+        // so never surface items older than maxAgeDays). Events keep their dates.
+        if (produces !== 'events' && config && config.maxAgeDays && date) {
+          const ageMs = Date.now() - new Date(date + 'T00:00:00').getTime();
+          if (ageMs > Number(config.maxAgeDays) * 86400000) return null;
+        }
+        if (produces === 'university') {
+          return { title, body: desc.slice(0, 800), category: 'news', date, sourceUrl, sourceName, important: false };
+        }
+        if (produces === 'town') {
+          return { title, body: desc.slice(0, 800), category: 'news', date, sourceUrl, sourceName };
+        }
+        // events (default)
+        return { title, description: desc.slice(0, 500), category: cats[0] || undefined, date, startTime, link, image, organizer: sourceName, sourceName, sourceUrl };
       }).filter(Boolean);
     } catch (e) {
       return [];

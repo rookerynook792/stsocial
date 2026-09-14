@@ -15,6 +15,7 @@ class UniversitySource extends SourceAdapter {
     this.type = 'university';
     this.reliability = 10;
     this.produces = 'events';
+    this.isDemoSource = true; // content is generated sample data
   }
   async fetch(config, live) {
     if (live && config && config.url) {

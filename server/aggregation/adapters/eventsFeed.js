@@ -14,6 +14,7 @@ class EventsFeedSource extends SourceAdapter {
     this.type = 'events_feed';
     this.reliability = 4;
     this.produces = 'events';
+    this.isDemoSource = true; // content is generated sample data
   }
   async fetch(config, live) {
     if (live && config && config.url) {

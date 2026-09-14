@@ -14,6 +14,7 @@ class StudentsAssocSource extends SourceAdapter {
     this.type = 'students_assoc';
     this.reliability = 8;
     this.produces = 'events';
+    this.isDemoSource = true; // content is generated sample data
   }
   async fetch(config, live) {
     if (live && config && config.url) {

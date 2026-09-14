@@ -278,6 +278,10 @@ migrate();
   if (!cols.includes('updated_at')) db.exec('ALTER TABLE events ADD COLUMN updated_at INTEGER');
   if (!cols.includes('creator_id')) db.exec('ALTER TABLE events ADD COLUMN creator_id INTEGER');
   if (!cols.includes('reliability')) db.exec('ALTER TABLE events ADD COLUMN reliability INTEGER NOT NULL DEFAULT 5');
+  const townCols = db.prepare('PRAGMA table_info(town_updates)').all().map((c) => c.name);
+  if (!townCols.includes('is_demo')) db.exec('ALTER TABLE town_updates ADD COLUMN is_demo INTEGER NOT NULL DEFAULT 0');
+  const uniCols = db.prepare('PRAGMA table_info(university_updates)').all().map((c) => c.name);
+  if (!uniCols.includes('is_demo')) db.exec('ALTER TABLE university_updates ADD COLUMN is_demo INTEGER NOT NULL DEFAULT 0');
 })();
 
 module.exports = { db, metaGet, metaSet };

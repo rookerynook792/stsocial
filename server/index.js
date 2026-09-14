@@ -9,11 +9,14 @@
  */
 const config = require('./config');
 const app = require('./app');
-const { seed } = require('./seed');
+const { seed, purgeDemo } = require('./seed');
 const scheduler = require('./aggregation/scheduler');
 
-// Seed demo data on first boot.
+// Seed on first boot (demo content only when demo mode is on).
 seed();
+
+// Live-only mode: clear any leftover sample rows so the app shows real data.
+if (!config.demoMode) purgeDemo();
 
 // Start scheduled background jobs (runs an immediate ingest on boot).
 scheduler.start();
