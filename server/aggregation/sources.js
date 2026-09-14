@@ -26,6 +26,10 @@ function seedSources() {
   const live = [
     ['University of St Andrews — Official News', 'rss', 'https://news.st-andrews.ac.uk/feed', 10, '{"produces":"university","maxAgeDays":60}'],
     ['Transition St Andrews (community)', 'rss', 'https://transitionsta.org/feed/', 5, '{"produces":"town","maxAgeDays":30}'],
+    ['University of St Andrews — Events Calendar', 'uni_events', 'https://events.st-andrews.ac.uk/wp-json/wp/v2/ajde_events', 10, '{"maxPageFetches":40}'],
+    ['St Andrews Golf — Live News', 'rss', 'https://news.google.com/rss/search?q=%22St+Andrews%22+golf&hl=en-GB&gl=GB&ceid=GB:en', 7, '{"produces":"town","category":"golf","maxAgeDays":21,"maxItems":10}'],
+    ['St Andrews Local News — Live', 'rss', 'https://news.google.com/rss/search?q=%22St+Andrews%22+-golf&hl=en-GB&gl=GB&ceid=GB:en', 7, '{"produces":"town","category":"news","maxAgeDays":14,"maxItems":10}'],
+    ['St Andrews — Annual Calendar', 'curated', 'curated://st-andrews-annual', 9, '{}'],
   ];
   const byUrl = db.prepare('SELECT id FROM event_sources WHERE url = ?');
   for (const d of live) if (!byUrl.get(d[2])) ins.run(d[0], d[1], d[2], d[3], d[4], now);

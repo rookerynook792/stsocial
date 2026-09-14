@@ -71,18 +71,18 @@ function upsertEvent(item, row, adapter) {
           title=?, description=?, category=?, price=?, ticket_url=?, organizer=?,
           image=?, emoji=?, location=?, address=?, end_time=?,
           source_type=?, source_name=?, source_url=?, reliability=?,
-          sources=?, updated_at=?
+          sources=?, featured=?, updated_at=?
         WHERE id=?
       `).run(
         incoming.title, incoming.description || existing.description, incoming.category,
         incoming.price || existing.price, incoming.ticketUrl || existing.ticket_url, incoming.organizer,
         incoming.image || existing.image, incoming.emoji, incoming.location, incoming.address, incoming.endTime,
         incoming.srcType, incoming.sourceName, incoming.sourceUrl, reliability,
-        JSON.stringify(srcList), now, existing.id,
+        JSON.stringify(srcList), item.featured ? 1 : (existing.featured || 0), now, existing.id,
       );
     } else {
-      db.prepare(`UPDATE events SET sources=?, updated_at=? WHERE id=?`)
-        .run(JSON.stringify(srcList), now, existing.id);
+      db.prepare('UPDATE events SET sources=?, featured=? WHERE id=?')
+        .run(JSON.stringify(srcList), item.featured ? 1 : (existing.featured || 0), existing.id);
     }
     return { id: existing.id, merged: true };
   }
@@ -94,13 +94,13 @@ function upsertEvent(item, row, adapter) {
        source_id, source_name, source_url, dedup_key, sources,
        featured, approved, status, is_demo, created_at)
     VALUES
-      (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0,1,'published',?,?)
+      (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1,'published',?,?)
   `).run(
     incoming.title, incoming.description, incoming.category, date, startTime, incoming.endTime, startMs,
     incoming.location, incoming.address, incoming.lat, incoming.lng, incoming.price, incoming.ticketUrl,
     incoming.organizer, incoming.image, incoming.emoji, reliability, incoming.srcType,
     row.id, incoming.sourceName, incoming.sourceUrl, key, JSON.stringify([{ name: row.name, url: incoming.sourceUrl }]),
-    isDemo, now,
+    item.featured ? 1 : 0, isDemo, now,
   );
   return { id: res.lastInsertRowid, merged: false };
 }

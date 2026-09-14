@@ -142,6 +142,7 @@ const TOWN_CATEGORIES = [
   { id: 'community', label: 'Community', emoji: '🧑‍🤝‍🧑' },
   { id: 'student', label: 'Student Info', emoji: '🎓' },
   { id: 'news', label: 'Local News', emoji: '📰' },
+  { id: 'golf', label: 'Golf', emoji: '⛳' },
 ];
 
 const UNI_CATEGORIES = [

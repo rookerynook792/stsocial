@@ -52,10 +52,15 @@ class RssSource extends SourceAdapter {
       if (!res.ok) return [];
       const xml = await res.text();
       const produces = (config && config.produces) || this.produces;
-      return items(xml).map((it) => {
-        const title = tag(it, 'title');
+      const clean = (s) => String(s || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+      const mapped = items(xml).map((it) => {
+        // Google News puts the publisher in <source> and appends it to the title.
+        const src = tag(it, 'source');
+        let title = tag(it, 'title');
+        if (src && title.toLowerCase().endsWith('- ' + src.toLowerCase())) title = title.slice(0, -(src.length + 3)).trim();
+        title = clean(title);
         if (!title) return null;
-        const desc = tag(it, 'description') || tag(it, 'content') || tag(it, 'summary');
+        const desc = clean(tag(it, 'description') || tag(it, 'content') || tag(it, 'summary'));
         const link = tag(it, 'link');
         const cats = [...it.matchAll(/<category[^>]*>([\s\S]*?)<\/category>/gi)]
           .map((m) => decode(m[1]).trim()).filter(Boolean);
@@ -68,7 +73,7 @@ class RssSource extends SourceAdapter {
           date = d.toISOString().slice(0, 10);
           startTime = d.toISOString().slice(11, 16);
         }
-        const sourceName = this.name;
+        const sourceName = src || this.name;
         const sourceUrl = link || url;
         // Freshness gate (town/university updates are shown "just now" in the UI,
         // so never surface items older than maxAgeDays). Events keep their dates.
@@ -76,15 +81,18 @@ class RssSource extends SourceAdapter {
           const ageMs = Date.now() - new Date(date + 'T00:00:00').getTime();
           if (ageMs > Number(config.maxAgeDays) * 86400000) return null;
         }
+        const townCat = (config && config.category) || 'news';
         if (produces === 'university') {
-          return { title, body: desc.slice(0, 800), category: 'news', date, sourceUrl, sourceName, important: false };
+          return { title, body: desc.slice(0, 800), category: townCat, date, sourceUrl, sourceName, important: false };
         }
         if (produces === 'town') {
-          return { title, body: desc.slice(0, 800), category: 'news', date, sourceUrl, sourceName };
+          return { title, body: desc.slice(0, 800), category: townCat, date, sourceUrl, sourceName };
         }
         // events (default)
         return { title, description: desc.slice(0, 500), category: cats[0] || undefined, date, startTime, link, image, organizer: sourceName, sourceName, sourceUrl };
       }).filter(Boolean);
+      if (produces !== 'events' && config && Number(config.maxItems)) return mapped.slice(0, Number(config.maxItems));
+      return mapped;
     } catch (e) {
       return [];
     }

@@ -19,8 +19,9 @@ function bounds(filter) {
     case 'week': return { a: t0, b: t0 + 7 * DAY - 1 };
     case 'weekend': return { a: sat, b: sat + DAY + DAY - 1 };
     case 'next_week': return { a: t0 + 7 * DAY, b: t0 + 14 * DAY - 1 };
-    case 'upcoming': return { a: now - 2 * 3600000, b: now + 30 * DAY };
-    default: return { a: now - 2 * 3600000, b: now + 30 * DAY };
+    case 'upcoming': return { a: now - 2 * 3600000, b: now + 60 * DAY };
+    case 'year': return { a: now - 2 * 3600000, b: now + 365 * DAY };
+    default: return { a: now - 2 * 3600000, b: now + 60 * DAY };
   }
 }
 

@@ -6,6 +6,7 @@ const TIME_FILTERS = [
   { id: 'today', label: 'Today' }, { id: 'tomorrow', label: 'Tomorrow' },
   { id: 'week', label: 'This Week' }, { id: 'weekend', label: 'This Weekend' },
   { id: 'next_week', label: 'Next Week' }, { id: 'upcoming', label: 'All' },
+  { id: 'year', label: 'This Year' },
 ];
 
 function buildHash(f, c, q) {
