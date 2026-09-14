@@ -148,7 +148,7 @@ async function voteComment(c) {
 }
 function sharePost(post) {
   const url = window.location.href;
-  const text = (post.title || post.body.slice(0, 80)) + ' (via ST SOCIAL)';
+  const text = (post.title || post.body.slice(0, 80)) + ' (via SAINT SOCIAL)';
   if (navigator.share) { navigator.share({ title: text, text, url }).catch(() => {}); return; }
   (navigator.clipboard ? navigator.clipboard.writeText(text + ' ' + url) : Promise.resolve()).then(() => toast('Link copied', 'success')).catch(() => {});
 }
@@ -161,7 +161,7 @@ function reportSheet(post) {
     actions: [
       h('button', { class: 'btn btn-ghost', text: 'Cancel', onClick: close }),
       h('button', { class: 'btn btn-danger', text: 'Submit', onClick: async () => {
-        try { await api.post(`/api/posts/${post.id}/report`, { reason: sel.value }); close(); toast('Reported. Thanks for keeping ST SOCIAL safe.', 'success'); }
+        try { await api.post(`/api/posts/${post.id}/report`, { reason: sel.value }); close(); toast('Reported. Thanks for keeping SAINT SOCIAL safe.', 'success'); }
         catch (e) { toast(e.message, 'error'); }
       } }),
     ],

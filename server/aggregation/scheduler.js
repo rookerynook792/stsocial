@@ -38,7 +38,7 @@ function aliveTick() {
   // Find (or create) a community feed source to attribute the sample to.
   let row = db.prepare(`SELECT * FROM event_sources WHERE type = 'events_feed' AND enabled = 1 ORDER BY id LIMIT 1`).get();
   if (!row) {
-    row = db.prepare(`INSERT INTO event_sources (name, type, url, reliability, config, enabled, created_at) VALUES ('ST SOCIAL Live Feed', 'events_feed', '', 4, '{}', 1, ?)`).run(Date.now());
+    row = db.prepare(`INSERT INTO event_sources (name, type, url, reliability, config, enabled, created_at) VALUES ('SAINT SOCIAL Live Feed', 'events_feed', '', 4, '{}', 1, ?)`).run(Date.now());
     row = db.prepare(`SELECT * FROM event_sources WHERE id = ?`).get(row.lastInsertRowid);
   }
   liveCount += 1;

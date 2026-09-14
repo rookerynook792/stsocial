@@ -31,8 +31,8 @@ export const NAV = [
 
 // route table — order matters (first match wins)
 const ROUTES = [
-  { m: /^\/?$/, view: Home, tab: 'home', title: 'ST SOCIAL', home: true },
-  { m: /^\/home\/?$/, view: Home, tab: 'home', title: 'ST SOCIAL', home: true },
+  { m: /^\/?$/, view: Home, tab: 'home', title: 'SAINT SOCIAL', home: true },
+  { m: /^\/home\/?$/, view: Home, tab: 'home', title: 'SAINT SOCIAL', home: true },
   { m: /^\/events\/?$/, view: Events, tab: 'events', title: 'Events' },
   { m: /^\/events?\//, view: EventDetail, tab: 'events', back: true, title: 'Event' },
   { m: /^\/explore\/?$/, view: Explore, tab: 'guide', title: 'Explore St Andrews' },
@@ -72,7 +72,7 @@ function renderHeader(route, ctx) {
   back.hidden = !route.back;
   if (route.home) {
     title.innerHTML = '';
-    title.append(h('span', { class: 'brand-word', text: 'ST SOCIAL' }));
+    title.append(h('span', { class: 'brand-word', text: 'SAINT SOCIAL' }));
   } else {
     title.textContent = route.title;
   }

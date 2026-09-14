@@ -116,7 +116,7 @@ export function interestedButton(evt, { type = 'interested', label = 'Interested
     onClick: (e) => { e.preventDefault(); e.stopPropagation(); onInterest(evt, type, btn); },
     html: `${active ? '✓ ' : '＋ '}${label}`,
   });
-  return h('span', { class: 'ec-interest' + (active ? ' active' : ''), title: `${count} ST SOCIAL students are interested`, onClick: (e) => { e.preventDefault(); e.stopPropagation(); onInterest(evt, type, btn); } },
+  return h('span', { class: 'ec-interest' + (active ? ' active' : ''), title: `${count} SAINT SOCIAL students are interested`, onClick: (e) => { e.preventDefault(); e.stopPropagation(); onInterest(evt, type, btn); } },
     btn,
     h('span', { text: count > 0 ? String(count) : '' }),
   );
@@ -219,7 +219,7 @@ export function updateCard(item, { kind = 'town' } = {}) {
     ),
     h('div', { class: 'u-title', text: item.title + important }),
     item.body ? h('div', { class: 'u-body', text: item.body }) : null,
-    h('div', { class: 'u-foot' }, h('span', { text: item.source_name || 'ST SOCIAL' }), ' · ', h('span', { text: timeAgo(item.created_at) })),
+    h('div', { class: 'u-foot' }, h('span', { text: item.source_name || 'SAINT SOCIAL' }), ' · ', h('span', { text: timeAgo(item.created_at) })),
   );
   return c;
 }

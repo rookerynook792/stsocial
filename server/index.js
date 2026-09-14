@@ -1,6 +1,6 @@
 'use strict';
 /**
- * ST SOCIAL — server entry point.
+ * SAINT SOCIAL — server entry point.
  *  1. Open the database (schema auto-migrates).
  *  2. Seed demo community data if the DB is empty.
  *  3. Start the scheduled ingestion (event/town/university aggregation).
@@ -26,7 +26,7 @@ scheduler.start();
 
 const server = app.listen(config.port, config.host, () => {
   // eslint-disable-next-line no-console
-  console.log(`\n  🌊 ST SOCIAL is running`);
+  console.log(`\n  🌊 SAINT SOCIAL is running`);
   console.log(`  → http://localhost:${config.port}`);
   console.log(`  → demo mode: ${config.demoMode} · live sources: ${config.liveSources}`);
   console.log(`  → St Andrews, Fife, Scotland\n`);

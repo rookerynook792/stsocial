@@ -100,11 +100,11 @@ r.post('/events', (req, res) => {
     INSERT INTO events (title, description, category, date, start_time, end_time, start_ms, location, address, price, ticket_url,
       organizer, image, emoji, reliability, source_type, source_name, approved, status, is_demo, created_at)
     VALUES (@title, @description, @category, @date, @start_time, @end_time, @start_ms, @location, @address, @price, @ticket_url,
-      @organizer, @image, @emoji, 3, 'verified', 'ST SOCIAL Admin', 1, 'published', 0, @created_at)
+      @organizer, @image, @emoji, 3, 'verified', 'SAINT SOCIAL Admin', 1, 'published', 0, @created_at)
   `).run({
     title, description: description || '', category, date, start_time: start_time || null, end_time: end_time || null, start_ms: startMs,
     location: location || 'St Andrews', address: 'St Andrews, Fife', price: price || null, ticket_url: ticket_url || null,
-    organizer: organizer || 'ST SOCIAL', image: image || null, emoji: emoji || null, created_at: Date.now(),
+    organizer: organizer || 'SAINT SOCIAL', image: image || null, emoji: emoji || null, created_at: Date.now(),
   });
   res.status(201).json({ id: res2.lastInsertRowid });
 });
@@ -215,7 +215,7 @@ r.post('/town', (req, res) => {
   const { category = 'news', title, body, verified } = req.body || {};
   if (!title) return res.status(400).json({ error: 'title required.' });
   const res2 = db.prepare('INSERT INTO town_updates (category,title,body,source_name,verified,dedup_key,created_at) VALUES (?,?,?,?,?,?,?)')
-    .run(category, title, body || '', 'ST SOCIAL Admin', verified ? 1 : 0, `admin-${Date.now()}`, Date.now());
+    .run(category, title, body || '', 'SAINT SOCIAL Admin', verified ? 1 : 0, `admin-${Date.now()}`, Date.now());
   res.status(201).json({ id: res2.lastInsertRowid });
 });
 r.delete('/town/:id', (req, res) => { db.prepare('DELETE FROM town_updates WHERE id=?').run(req.params.id); res.json({ ok: true }); });
@@ -223,7 +223,7 @@ r.post('/university', (req, res) => {
   const { category = 'news', title, body, important } = req.body || {};
   if (!title) return res.status(400).json({ error: 'title required.' });
   const res2 = db.prepare('INSERT INTO university_updates (category,title,body,source_name,important,dedup_key,created_at) VALUES (?,?,?,?,?,?,?)')
-    .run(category, title, body || '', 'ST SOCIAL Admin', important ? 1 : 0, `admin-${Date.now()}`, Date.now());
+    .run(category, title, body || '', 'SAINT SOCIAL Admin', important ? 1 : 0, `admin-${Date.now()}`, Date.now());
   res.status(201).json({ id: res2.lastInsertRowid });
 });
 r.delete('/university/:id', (req, res) => { db.prepare('DELETE FROM university_updates WHERE id=?').run(req.params.id); res.json({ ok: true }); });

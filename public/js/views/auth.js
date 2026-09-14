@@ -9,7 +9,7 @@ export async function render(container, ctx) {
 
   const logo = h('div', { class: 'auth-logo' },
     h('div', { class: 'mark', text: 'ST' }),
-    h('h1', { class: 'brand-word', text: 'ST SOCIAL' }),
+    h('h1', { class: 'brand-word', text: 'SAINT SOCIAL' }),
     h('div', { class: 'tag', text: 'St Andrews, Fife, Scotland' }),
   );
 

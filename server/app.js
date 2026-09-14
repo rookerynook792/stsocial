@@ -45,10 +45,10 @@ if (config.env !== 'test') {
 app.use(optionalAuth);
 
 /* --------------------------------- meta ---------------------------------- */
-app.get('/api/health', (req, res) => res.json({ ok: true, app: 'ST SOCIAL', version: '1.0.0', time: Date.now() }));
+app.get('/api/health', (req, res) => res.json({ ok: true, app: 'SAINT SOCIAL', version: '1.0.0', time: Date.now() }));
 app.get('/api/meta', (req, res) => {
   res.json({
-    app: 'ST SOCIAL',
+    app: 'SAINT SOCIAL',
     location: 'University of St Andrews, Fife, Scotland',
     demoMode: config.demoMode,
     liveSources: config.liveSources,

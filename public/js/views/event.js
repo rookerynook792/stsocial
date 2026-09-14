@@ -67,7 +67,7 @@ export async function render(container, ctx) {
       interestPill(evt, 'going', 'Going'),
     ),
     h('div', { class: 'center small', style: { marginTop: '12px', color: 'var(--text-dim)', fontWeight: 700 },
-      text: evt.interested_count > 0 ? `${evt.interested_count} ST SOCIAL student${evt.interested_count === 1 ? '' : 's'} are interested` : 'Be the first to mark interest' }),
+      text: evt.interested_count > 0 ? `${evt.interested_count} SAINT SOCIAL student${evt.interested_count === 1 ? '' : 's'} are interested` : 'Be the first to mark interest' }),
   ));
 
   // info
@@ -113,7 +113,7 @@ export async function render(container, ctx) {
 
 async function share(evt) {
   const url = window.location.href;
-  const text = `${evt.title} — ${dayLabel(evt.start_ms)} at ${fmtTime(evt.start_ms)}, ${evt.location} (via ST SOCIAL)`;
+  const text = `${evt.title} — ${dayLabel(evt.start_ms)} at ${fmtTime(evt.start_ms)}, ${evt.location} (via SAINT SOCIAL)`;
   if (navigator.share) { try { await navigator.share({ title: evt.title, text, url }); return; } catch { /* cancelled */ } }
   try { await navigator.clipboard.writeText(text + ' ' + url); alert('Copied to clipboard: ' + text); }
   catch { alert(text); }

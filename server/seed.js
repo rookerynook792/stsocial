@@ -44,7 +44,7 @@ function seed() {
 
   // Always create the functional admin account (present in both demo and live mode).
   console.log('Creating admin account…');
-  const adminId = addUser({ name: 'ST SOCIAL Team', username: 'stsocial', email: 'admin@stsocial.app', password: 'stsocial-admin', avatar: '🦉', role: 'admin', verified: 1, bio: 'We keep ST SOCIAL running. Say hi!', interests: ['community'] });
+  const adminId = addUser({ name: 'SAINT SOCIAL Team', username: 'stsocial', email: 'admin@stsocial.app', password: 'stsocial-admin', avatar: '🦉', role: 'admin', verified: 1, bio: 'We keep SAINT SOCIAL running. Say hi!', interests: ['community'] });
 
   if (!config.demoMode) {
     console.log('\n✅ Seed complete (LIVE mode — no sample data).');

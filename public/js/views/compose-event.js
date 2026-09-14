@@ -116,7 +116,7 @@ export async function render(container, ctx) {
         location: fields.location.value, category, price: fields.price.value || null,
         ticket_url: fields.ticket.value || null, image: imageUrl, emoji: imageUrl ? null : emoji,
       });
-      toast('Event submitted — pending approval by the ST SOCIAL team.', 'success');
+      toast('Event submitted — pending approval by the SAINT SOCIAL team.', 'success');
       goto('#/event/' + out.event.id);
     } catch (e) { toast(e.message, 'error'); publish.disabled = false; publish.textContent = 'Publish event'; }
   }

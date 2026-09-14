@@ -1,7 +1,7 @@
 'use strict';
 /**
  * Rule-based event categoriser.
- * Maps free-text titles/descriptions onto ST SOCIAL's 12 categories using
+ * Maps free-text titles/descriptions onto SAINT SOCIAL's 12 categories using
  * keyword weights. A provider may also supply an explicit category, which wins.
  */
 

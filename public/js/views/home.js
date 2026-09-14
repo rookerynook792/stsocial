@@ -113,5 +113,5 @@ export async function render(container, ctx) {
   }
 
   container.append(h('div', { class: 'center faint small', style: { marginTop: '30px', paddingBottom: '10px' },
-    text: store.meta && store.meta.demoMode ? 'DEMO DATA · ST SOCIAL · St Andrews' : 'ST SOCIAL · St Andrews' }));
+    text: store.meta && store.meta.demoMode ? 'DEMO DATA · SAINT SOCIAL · St Andrews' : 'SAINT SOCIAL · St Andrews' }));
 }

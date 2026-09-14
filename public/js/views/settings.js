@@ -66,6 +66,6 @@ export async function render(container, ctx) {
       toast('Signed out', 'info');
       goto('#/auth');
     } }),
-    h('div', { class: 'center faint small', style: { marginTop: '24px' }, text: 'ST SOCIAL v1.0 · St Andrews, Fife' }),
+    h('div', { class: 'center faint small', style: { marginTop: '24px' }, text: 'SAINT SOCIAL v1.0 · St Andrews, Fife' }),
   );
 }

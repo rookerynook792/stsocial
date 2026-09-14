@@ -81,7 +81,7 @@ r.post('/', requireAuth, (req, res) => {
     source_name: req.user.name, created_at: Date.now(),
   });
   const row = db.prepare('SELECT * FROM events WHERE id = ?').get(res2.lastInsertRowid);
-  res.status(201).json({ event: eventToApi(row, req.userId), status: 'pending', message: 'Your event was submitted and is pending approval by the ST SOCIAL team.' });
+  res.status(201).json({ event: eventToApi(row, req.userId), status: 'pending', message: 'Your event was submitted and is pending approval by the SAINT SOCIAL team.' });
 });
 
 // POST /api/events/:id/interest  { type: 'interested' | 'going' }
