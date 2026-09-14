@@ -10,10 +10,13 @@
 const config = require('./config');
 const app = require('./app');
 const { seed, purgeDemo } = require('./seed');
+const { seedVenues } = require('./venues');
 const scheduler = require('./aggregation/scheduler');
 
 // Seed on first boot (demo content only when demo mode is on).
 seed();
+// Real local venues (bars, pubs, clubs) — genuine places, not sample data.
+seedVenues();
 
 // Live-only mode: clear any leftover sample rows so the app shows real data.
 if (!config.demoMode) purgeDemo();

@@ -8,12 +8,14 @@ const config = require('../config');
 const r = express.Router();
 
 const PLACE_CATEGORIES = [
+  { id: 'bar', label: 'Bars & Nightlife', emoji: '🍺' },
+  { id: 'golf', label: 'Golf', emoji: '⛳' },
   { id: 'cafe', label: 'Cafés', emoji: '☕' },
   { id: 'restaurant', label: 'Restaurants', emoji: '🍽️' },
-  { id: 'bar', label: 'Bars', emoji: '🍺' },
+  { id: 'entertainment', label: 'Entertainment', emoji: '🎭' },
   { id: 'shop', label: 'Shops', emoji: '🛍️' },
   { id: 'gym', label: 'Gyms', emoji: '💪' },
-  { id: 'entertainment', label: 'Entertainment', emoji: '🎢' },
+  { id: 'landmark', label: 'Landmarks & Beaches', emoji: '📍' },
   { id: 'service', label: 'Services', emoji: '🧰' },
 ];
 

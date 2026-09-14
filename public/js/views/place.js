@@ -17,7 +17,9 @@ export async function render(container, ctx) {
 
   container.append(h('div', { class: 'card mt', style: { padding: '16px' } },
     h('h1', { style: { fontSize: '23px' }, text: p.name }),
-    h('div', { class: 'flex aic gap mt-sm' }, stars(p.rating), h('span', { class: 'muted small', text: p.review_count + ' student reviews' })),
+    h('div', { class: 'flex aic gap mt-sm' },
+      p.review_count > 0 ? stars(p.rating) : h('span', { class: 'tag-soft', text: '📍 ' + (p.category || 'local') }),
+      p.review_count > 0 ? h('span', { class: 'muted small', text: p.review_count + ' student reviews' }) : h('span', { class: 'muted small', text: 'No student reviews yet' })),
     p.description ? h('p', { class: 'muted', style: { marginTop: '12px' }, text: p.description }) : null,
     infoRows(p),
     p.website ? h('a', { class: 'btn btn-primary mt', href: p.website, target: '_blank', rel: 'noopener' }, h('span', { text: '🌐 Visit website' })) : null,

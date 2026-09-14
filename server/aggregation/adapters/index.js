@@ -18,6 +18,7 @@ const UniversityFeedSource = require('./universityFeed');
 const RssSource = require('./rss');
 const UniEventsSource = require('./uniEvents');
 const CuratedSource = require('./curated');
+const WeatherSource = require('./weather');
 
 const ADAPTERS = {
   university: UniversitySource,
@@ -29,6 +30,7 @@ const ADAPTERS = {
   rss: RssSource,
   uni_events: UniEventsSource,
   curated: CuratedSource,
+  weather: WeatherSource,
 };
 
 // A source "type" an admin can choose when adding a source.
@@ -42,6 +44,7 @@ const AVAILABLE_SOURCE_TYPES = [
   { id: 'rss', label: 'Custom RSS / Atom feed', produces: 'events', reliability: 5 },
   { id: 'uni_events', label: 'University events calendar (live)', produces: 'events', reliability: 10 },
   { id: 'curated', label: 'St Andrews annual events (curated)', produces: 'events', reliability: 9 },
+  { id: 'weather', label: 'St Andrews weather (Open-Meteo)', produces: 'town', reliability: 8 },
 ];
 
 function createAdapter(type) {
