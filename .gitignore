@@ -8,3 +8,5 @@ data/uploads/
 
 # Android signing keystore — NEVER commit
 keystore/
+
+dist/
