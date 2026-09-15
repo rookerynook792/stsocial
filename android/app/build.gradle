@@ -18,10 +18,15 @@ android {
     }
     signingConfigs {
         release {
+            def ksProps = new Properties()
+            def ksFile = file('../../keystore/keystore.properties')
+            if (ksFile.exists()) {
+                ksFile.withInputStream { ksProps.load(it) }
+            }
             storeFile file('../../keystore/saint-social.keystore')
-            storePassword '248cf7e021f9bfff96ec338f385b37c2'
-            keyAlias 'saintsocial'
-            keyPassword '248cf7e021f9bfff96ec338f385b37c2'
+            storePassword ksProps.getProperty('storePassword', System.getenv('KEYSTORE_PASS') ?: '')
+            keyAlias ksProps.getProperty('keyAlias', 'saintsocial')
+            keyPassword ksProps.getProperty('keyPassword', System.getenv('KEYSTORE_PASS') ?: '')
         }
     }
     buildTypes {

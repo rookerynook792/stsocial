@@ -5,3 +5,6 @@ data/*.db-shm
 data/uploads/
 .env
 *.log
+
+# Android signing keystore — NEVER commit
+keystore/
