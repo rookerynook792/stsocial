@@ -1,0 +1,12 @@
+{
+  "appId": "app.stsocial.standrews",
+  "appName": "SAINT SOCIAL",
+  "webDir": "public",
+  "backgroundColor": "#080A14",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false
+  }
+}

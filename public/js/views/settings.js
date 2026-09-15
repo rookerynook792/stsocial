@@ -60,6 +60,12 @@ export async function render(container, ctx) {
       h('div', { class: 'row-item' }, h('div', { class: 'ri-body' }, h('div', { class: 'ri-title', text: 'Notifications' }), h('div', { class: 'ri-sub', text: 'Manage what you get notified about.' })),
         h('a', { class: 'pill-btn', href: '#/notifications', text: 'Manage' })),
     ),
+    h('div', { class: 'card mt', style: { padding: '16px' } },
+      h('div', { class: 'section-title mb-sm' }, h('span', { text: '📄 About' })),
+      h('div', { class: 'row-item' }, h('div', { class: 'ri-body' }, h('div', { class: 'ri-title', text: 'Privacy policy' }), h('div', { class: 'ri-sub', text: 'How we handle your data — the short version: minimal, no ads, no trackers.' })),
+        h('a', { class: 'pill-btn', href: '/privacy', text: 'Open' })),
+      h('div', { class: 'row-item' }, h('div', { class: 'ri-body' }, h('div', { class: 'ri-title', text: 'About SAINT SOCIAL' }), h('div', { class: 'ri-sub', text: 'Built by the SAINT SOCIAL team for St Andrews. Event data comes from official university, society and venue sources.' }))),
+    ),
     h('button', { class: 'btn btn-danger mt', text: '🚪 Sign out', onClick: async () => {
       try { await api.post('/api/auth/logout'); } catch { /* ignore */ }
       store.setToken(null); store.setUser(null);

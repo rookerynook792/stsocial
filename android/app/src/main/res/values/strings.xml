@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">SAINT SOCIAL</string>
+    <string name="title_activity_main">SAINT SOCIAL</string>
+    <string name="package_name">app.stsocial.standrews</string>
+    <string name="custom_url_scheme">app.stsocial.standrews</string>
+</resources>

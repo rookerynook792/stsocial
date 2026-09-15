@@ -101,4 +101,11 @@ async function boot() {
 
 boot();
 
+// PWA: register the service worker (app shell + offline).
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
+
 export { toast };
