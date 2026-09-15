@@ -4,7 +4,8 @@
   "webDir": "public",
   "backgroundColor": "#080A14",
   "server": {
-    "androidScheme": "https"
+    "androidScheme": "https",
+    "url": "https://stsocial.onrender.com"
   },
   "android": {
     "allowMixedContent": false
